@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, memo } from 'react';
 
 import IconButton from '../UI/IconButton.jsx';
 import MinusIcon from '../UI/Icons/MinusIcon.jsx';
@@ -26,36 +26,43 @@ function isPrime(number) {
 
   return true;
 }
+// What memo does is that it looks at the props of the component function and check if the value 
+// of initialCount has not changed (exactly the same in memory), it would prevent the component function 
+// to run again just because the parent is being re-rendered - External changes
+// So this component will only be re-rendered when either
+// 1. an internal state changes
+// 2. the props( initialCount) value changes
 
-export default function Counter({ initialCount }) {
-  log('<Counter /> rendered', 1);
-  const initialCountIsPrime = isPrime(initialCount);
+ const MemoWrappedCounter = memo(function Counter({ initialCount }) {
+       log('<Counter /> rendered', 1);
+       const initialCountIsPrime = isPrime(initialCount);
 
-  const [counter, setCounter] = useState(initialCount);
+       const [counter, setCounter] = useState(initialCount);
 
-  function handleDecrement() {
-    setCounter((prevCounter) => prevCounter - 1);
-  }
+       function handleDecrement() {
+         setCounter((prevCounter) => prevCounter - 1);
+       }
 
-  function handleIncrement() {
-    setCounter((prevCounter) => prevCounter + 1);
-  }
-
-  return (
-    <section className="counter">
-      <p className="counter-info">
-        The initial counter value was <strong>{initialCount}</strong>. It{' '}
-        <strong>is {initialCountIsPrime ? 'a' : 'not a'}</strong> prime number.
-      </p>
-      <p>
-        <IconButton icon={MinusIcon} onClick={handleDecrement}>
-          Decrement
-        </IconButton>
-        <CounterOutput value={counter} />
-        <IconButton icon={PlusIcon} onClick={handleIncrement}>
-          Increment
-        </IconButton>
-      </p>
-    </section>
-  );
-}
+       function handleIncrement() {
+         setCounter((prevCounter) => prevCounter + 1);
+       }
+       return (
+           <section className="counter">
+             <p className="counter-info">
+               The initial counter value was <strong>{initialCount}</strong>. It{' '}
+               <strong>is {initialCountIsPrime ? 'a' : 'not a'}</strong> prime number.
+             </p>
+             <p>
+               <IconButton icon={MinusIcon} onClick={handleDecrement}>
+                 Decrement
+               </IconButton>
+               <CounterOutput value={counter} />
+               <IconButton icon={PlusIcon} onClick={handleIncrement}>
+                 Increment
+               </IconButton>
+             </p>
+           </section>
+       );
+     }
+ );
+export default MemoWrappedCounter;
