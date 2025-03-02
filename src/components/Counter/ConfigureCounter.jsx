@@ -1,3 +1,5 @@
+import {useState} from "react";
+
 const ConfigureCounter = ({onSet}) => {
     const [enteredNumber, setEnteredNumber] = useState(0);
 

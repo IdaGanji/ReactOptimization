@@ -26,12 +26,7 @@ function isPrime(number) {
 
   return true;
 }
-// What memo does is that it looks at the props of the component function and check if the value 
-// of initialCount has not changed (exactly the same in memory), it would prevent the component function 
-// to run again just because the parent is being re-rendered - External changes
-// So this component will only be re-rendered when either
-// 1. an internal state changes
-// 2. the props( initialCount) value changes
+
 
  const MemoWrappedCounter = memo(function Counter({ initialCount }) {
        log('<Counter /> rendered', 1);
@@ -66,3 +61,8 @@ function isPrime(number) {
      }
  );
 export default MemoWrappedCounter;
+
+// Now when the counter state changes the whole component gets re-rendered.
+// All the children also do get re-rendered.This re-rendering does make sense for the <CounterOutput value={counter} />
+// But not for IconButton component. 
+// Therefore, we wrap them with memo to stop the re-rendering
