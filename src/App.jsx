@@ -1,38 +1,33 @@
-import { useState } from 'react';
+import {useState} from 'react';
 
 import Counter from './components/Counter/Counter.jsx';
 import Header from './components/Header.jsx';
-import { log } from './log.js';
+import {log} from './log.js';
 import MemoWrappedCounter from "./components/Counter/Counter.jsx";
+import ConfigureCounter from "./components/Counter/ConfigureCounter.jsx";
 
 function App() {
-  log('<App /> rendered');
+    const [chosenCount, setChosenCount] = useState(0);
+    log('<App /> rendered');
 
-  const [enteredNumber, setEnteredNumber] = useState(0);
-  const [chosenCount, setChosenCount] = useState(0);
+    function handleSetCount(newCount) {
+        setChosenCount(newCount);
+    }
 
-  function handleChange(event) {
-    setEnteredNumber(+event.target.value);
-  }
+    // Since state-changes and re-execution of child components do not trigger 
+    // re-rendering of parent components, so it is smart to move the states and JSX code 
+    // That change to a child component so that only they change and update not the parent and all other children
 
-  function handleSetClick() {
-    setChosenCount(enteredNumber);
-    setEnteredNumber(0);
-  }
 
-  return (
-    <>
-      <Header />
-      <main>
-        <section id="configure-counter">
-          <h2>Set Counter</h2>
-          <input type="number" onChange={handleChange} value={enteredNumber} />
-          <button onClick={handleSetClick}>Set</button>
-        </section>
-        <MemoWrappedCounter initialCount={chosenCount} />
-      </main>
-    </>
-  );
+    return (
+        <>
+            <Header/>
+            <main>
+                <ConfigureCounter onSet={handleSetCount}/>
+                <MemoWrappedCounter initialCount={chosenCount}/>
+            </main>
+        </>
+    );
 }
 
 export default App;
